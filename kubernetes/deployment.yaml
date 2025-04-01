@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wealth-wise-deployment
+  labels:
+    app: wealth-wise
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: wealth-wise
+  template:
+    metadata:
+      labels:
+        app: wealth-wise
+    spec:
+      containers:
+      - name: wealth-wise-container
+        image: ghcr.io/lumen-jane/wealthwise:latest
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+      imagePullSecrets:
+      - name: regcred
