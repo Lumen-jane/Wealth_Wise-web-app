@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Plus, X, Edit2, Trash2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { Transaction } from '../types/finance';
@@ -26,12 +26,7 @@ function Transactions() {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<{ id: string; name: string; type: 'income' | 'expense' }[]>([]);
 
-  useEffect(() => {
-    fetchTransactions();
-    fetchCategories();
-  }, []);
-
-  const fetchTransactions = async () => {
+  const fetchTransactions = useCallback(async () => {
     const { data, error } = await supabase
       .from('transactions')
       .select('*')
@@ -43,7 +38,12 @@ function Transactions() {
     }
 
     setTransactions(data || []);
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchTransactions();
+    fetchCategories();
+  }, [fetchTransactions]);
 
   const fetchCategories = async () => {
     const { data, error } = await supabase
@@ -250,7 +250,7 @@ function Transactions() {
                   {transaction.description}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {categories.find(c => c.id === transaction.category_id)?.name}
+                  {categories.find(c => c.id === transaction.category)?.name}
                 </td>
                 <td className={`px-6 py-4 whitespace-nowrap text-sm text-right font-medium ${
                   transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
