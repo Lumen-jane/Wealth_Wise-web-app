@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
+<<<<<<< HEAD
 import { Plus, X, Edit2, Trash2 } from 'lucide-react';
+=======
+import { Plus, X, Trash2 } from 'lucide-react'; // Removed Edit2
+>>>>>>> 60da695 (fixed ci-cd issues)
 import { supabase } from '../lib/supabase';
 import { Transaction } from '../types/finance';
 
@@ -38,12 +42,20 @@ function Transactions() {
     }
 
     setTransactions(data || []);
+<<<<<<< HEAD
   }, []);
+=======
+  }, []); // Stable reference
+>>>>>>> 60da695 (fixed ci-cd issues)
 
   useEffect(() => {
     fetchTransactions();
     fetchCategories();
+<<<<<<< HEAD
   }, [fetchTransactions]);
+=======
+  }, [fetchTransactions]); // Added fetchTransactions to dependencies
+>>>>>>> 60da695 (fixed ci-cd issues)
 
   const fetchCategories = async () => {
     const { data, error } = await supabase
