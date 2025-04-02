@@ -1,9 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-<<<<<<< HEAD
-import { Plus, X, Edit2, Trash2 } from 'lucide-react';
-=======
-import { Plus, X, Trash2 } from 'lucide-react'; // Removed Edit2
->>>>>>> 60da695 (fixed ci-cd issues)
+import { Plus, X, Trash2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { Transaction } from '../types/finance';
 
@@ -42,20 +38,7 @@ function Transactions() {
     }
 
     setTransactions(data || []);
-<<<<<<< HEAD
   }, []);
-=======
-  }, []); // Stable reference
->>>>>>> 60da695 (fixed ci-cd issues)
-
-  useEffect(() => {
-    fetchTransactions();
-    fetchCategories();
-<<<<<<< HEAD
-  }, [fetchTransactions]);
-=======
-  }, [fetchTransactions]); // Added fetchTransactions to dependencies
->>>>>>> 60da695 (fixed ci-cd issues)
 
   const fetchCategories = async () => {
     const { data, error } = await supabase
@@ -69,6 +52,11 @@ function Transactions() {
 
     setCategories(data || []);
   };
+
+  useEffect(() => {
+    fetchTransactions();
+    fetchCategories();
+  }, [fetchTransactions]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -262,7 +250,7 @@ function Transactions() {
                   {transaction.description}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {categories.find(c => c.id === transaction.category)?.name}
+                  {categories.find(c => c.id === transaction.category_id)?.name}
                 </td>
                 <td className={`px-6 py-4 whitespace-nowrap text-sm text-right font-medium ${
                   transaction.type === 'income' ? 'text-green-600' : 'text-red-600'

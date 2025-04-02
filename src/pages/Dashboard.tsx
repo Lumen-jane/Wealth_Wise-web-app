@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { supabase } from '../lib/supabase';
 import { format, startOfMonth, endOfMonth, subMonths } from 'date-fns';
@@ -16,17 +16,14 @@ interface MonthlyData {
 }
 
 function Dashboard() {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  // We've removed the unused transactions state since it's not used in the component
   const [monthlyData, setMonthlyData] = useState<MonthlyData[]>([]);
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalExpenses, setTotalExpenses] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchTransactions();
-  }, []);
-
-  const fetchTransactions = async () => {
+  // Convert fetchTransactions to useCallback to properly handle dependencies
+  const fetchTransactions = useCallback(async () => {
     try {
       const endDate = endOfMonth(new Date());
       const startDate = startOfMonth(subMonths(endDate, 5)); // Last 6 months
@@ -40,14 +37,17 @@ function Dashboard() {
 
       if (error) throw error;
 
-      setTransactions(data || []);
       processTransactionData(data || []);
     } catch (error) {
       console.error('Error fetching transactions:', error);
     } finally {
       setLoading(false);
     }
-  };
+  }, []); // No dependencies needed for fetchTransactions
+
+  useEffect(() => {
+    fetchTransactions();
+  }, [fetchTransactions]); // Added fetchTransactions as a dependency
 
   const processTransactionData = (transactions: Transaction[]) => {
     // Calculate totals
