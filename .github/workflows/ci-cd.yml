@@ -152,7 +152,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GHCR_TOKEN }}
       
       - name: Setup Git config
         run: |
@@ -178,7 +178,7 @@ jobs:
           aws-region: us-east-1  
     
       - name: Set up kubectl for EKS
-        uses: aws-actions/amazon-eks-kubeconfig-action@v1
+        uses: aws-actions/amazon-eks-kubeconfig-action@v2
         with:
           cluster-name: my-clusters
           region: us-east-1  
