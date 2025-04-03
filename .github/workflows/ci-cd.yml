@@ -169,20 +169,20 @@ jobs:
           sed -i "s|image: ${REGISTRY}/.*|image: ${NEW_IMAGE}|g" kubernetes/deployment.yaml
           echo "Updated deployment to use image: ${NEW_IMAGE}"
           grep -A 1 "image:" kubernetes/deployment.yaml
-
+      
       - name: Set up AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1  
-    
+      
       - name: Set up kubectl for EKS
-        uses: aws-actions/amazon-eks-kubeconfig-action@v2
+        uses: aws-actions/amazon-eks-kubeconfig-action@67fbcbb121271f7775d2e7715933280b06314838
         with:
           cluster-name: my-clusters
-          region: us-east-1  
-    
+          region: us-east-1
+      
       - name: Commit and push changes
         run: |
           kubectl set image deployment/my-deployment my-container=ghcr.io/${{ github.repository }}/app:${{ github.sha }}
