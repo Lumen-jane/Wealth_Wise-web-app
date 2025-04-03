@@ -199,10 +199,9 @@ jobs:
           sudo apt update
           sudo apt install -y gh
       
-      - name: Authenticate GitHub CLI
+      - name: Fetch Available Tags for EKS Kubeconfig Action
         env:
           GH_TOKEN: ${{ secrets.GHCR_PAT }}
-        run: gh auth login --with-token <<< "${GH_TOKEN}"
-      
-      - name: Fetch Available Tags for EKS Kubeconfig Action
         run: gh api repos/aws-actions/amazon-eks-kubeconfig-action/git/refs/tags
+      
+    
